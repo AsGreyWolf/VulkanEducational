@@ -258,7 +258,7 @@ int main() {
 	    {{-0.5f, 0.0f, 0.0f}, {0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}}};
 
 	auto vertexBuffer = createBuffer(gpu, verts.data(), verts.size());
-	auto texture = loadTexture(gpu, "cobblestone.jpg", 10);
+	auto texture = loadTexture(gpu, "textures/cobblestone.jpg", 10);
 	auto textureSampler =
 	    ldevice.get().createSamplerUnique({{},
 	                                       vk::Filter::eLinear,
@@ -276,7 +276,7 @@ int main() {
 	                                       texture.mipmaps - 1.0f,
 	                                       vk::BorderColor::eFloatTransparentBlack,
 	                                       false});
-	auto textureDisp = loadTexture(gpu, "cobblestone_disp.jpg", 10);
+	auto textureDisp = loadTexture(gpu, "textures/cobblestone_disp.jpg", 10);
 	auto textureDispSampler =
 	    ldevice.get().createSamplerUnique({{},
 	                                       vk::Filter::eLinear,

@@ -6,10 +6,10 @@ std::tuple<vk::UniquePipeline, vk::UniquePipelineLayout> createPipeline(
     const std::vector<vk::VertexInputAttributeDescription> &vertexAttribs,
     const std::vector<vk::DescriptorSetLayout> &descriptorSetLayouts,
     vk::RenderPass renderpass, uint32_t subpass) {
-	auto vert = loadShader(gpu, "vert.spv");
-	auto frag = loadShader(gpu, "frag.spv");
-	auto tesc = loadShader(gpu, "tesc.spv");
-	auto tese = loadShader(gpu, "tese.spv");
+	auto vert = loadShader(gpu, "shaders/vert.spv");
+	auto frag = loadShader(gpu, "shaders/frag.spv");
+	auto tesc = loadShader(gpu, "shaders/tesc.spv");
+	auto tese = loadShader(gpu, "shaders/tese.spv");
 	std::vector<vk::PipelineShaderStageCreateInfo> shaderStage = {
 	    {{}, vk::ShaderStageFlagBits::eVertex, vert.get(), "main", nullptr},
 	    {{}, vk::ShaderStageFlagBits::eFragment, frag.get(), "main", nullptr},
