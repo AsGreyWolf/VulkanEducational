@@ -154,9 +154,14 @@ int main() {
 	         textureLayouts.data()});
 	vector<vk::DescriptorSetLayout> descriptorSetLayouts = {
 	    {matrixDescriptorSetLayout.get(), textureDescriptorSetLayout.get()}};
-	auto[pipeline, pipelineLayout] =
-	    createPipeline(gpu, extent, vertexBindings, vertexAttribs,
-	                   descriptorSetLayouts, renderPass.get(), 0);
+	auto pipelineLayout = gpu.device.createPipelineLayoutUnique(
+	    {{},
+	     static_cast<uint32_t>(descriptorSetLayouts.size()),
+	     descriptorSetLayouts.data(),
+	     0,
+	     nullptr});
+	auto pipeline = createPipeline(gpu, extent, vertexBindings, vertexAttribs,
+	                               pipelineLayout.get(), renderPass.get(), 0);
 
 	auto swapchain = ldevice.get().createSwapchainKHRUnique(
 	    {{},

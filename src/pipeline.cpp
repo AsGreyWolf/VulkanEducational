@@ -1,11 +1,11 @@
 #include "pipeline.hpp"
 
-std::tuple<vk::UniquePipeline, vk::UniquePipelineLayout> createPipeline(
+vk::UniquePipeline createPipeline(
     DevicePart gpu, vk::Extent2D extent,
     const std::vector<vk::VertexInputBindingDescription> &vertexBindings,
     const std::vector<vk::VertexInputAttributeDescription> &vertexAttribs,
-    const std::vector<vk::DescriptorSetLayout> &descriptorSetLayouts,
-    vk::RenderPass renderpass, uint32_t subpass) {
+    vk::PipelineLayout pipelineLayout, vk::RenderPass renderpass,
+    uint32_t subpass) {
 	auto vert = loadShader(gpu, "shaders/vert.spv");
 	auto frag = loadShader(gpu, "shaders/frag.spv");
 	auto tesc = loadShader(gpu, "shaders/tesc.spv");
@@ -66,12 +66,6 @@ std::tuple<vk::UniquePipeline, vk::UniquePipelineLayout> createPipeline(
 	    static_cast<uint32_t>(blendAttachments.size()),
 	    blendAttachments.data(),
 	    {{0.0f, 0.0f, 0.0f, 0.0f}}};
-	auto pipelineLayout = gpu.device.createPipelineLayoutUnique(
-	    {{},
-	     static_cast<uint32_t>(descriptorSetLayouts.size()),
-	     descriptorSetLayouts.data(),
-	     0,
-	     nullptr});
 	auto pipeline = gpu.device.createGraphicsPipelineUnique(
 	    vk::PipelineCache{},
 	    {{},
@@ -86,10 +80,10 @@ std::tuple<vk::UniquePipeline, vk::UniquePipelineLayout> createPipeline(
 	     &depthStencilStage,
 	     &blendStage,
 	     nullptr,
-	     pipelineLayout.get(),
+	     pipelineLayout,
 	     renderpass,
 	     subpass,
 	     vk::Pipeline{},
 	     -1});
-	return {std::move(pipeline), std::move(pipelineLayout)};
+	return std::move(pipeline);
 }
