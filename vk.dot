@@ -1,0 +1,63 @@
+digraph vk {
+	/*graph [splines=ortho, concentrate=true];*/
+	Instance->Surface;
+	Instance->InstanceExtension;
+	Instance->InstanceLayer->layer_InstanceExtension;
+	Instance->PhysicalDevice->Device;
+	PhysicalDevice->DeviceExtension;
+	PhysicalDevice->DeviceLayer->layer_DeviceExtension;
+	PhysicalDevice->Memory;
+	PhysicalDevice->QueueFamily;
+	{PhysicalDevice,Surface}->SurfaceCapabilities;
+	{Surface,Swapchain}->Swapchain->Image;
+	Image->ImageView;
+	{PipelineLayout,RenderPass,Pipeline,ShaderModule}->Pipeline;
+	{RenderPass,ImageView}->Framebuffer;
+	CommandPool->CommandBuffer;
+	{CommandBuffer,RenderPass,Pipeline,Framebuffer,Buffer,PipelineLayout,DescriptorSet}->record_CommandBuffer;
+	{Swapchain,record_CommandBuffer,Semaphore,Queue,CommandBuffer,bind_Buffer_Memory}->draw;
+	Buffer->BufferMemoryRequirements;
+	{Buffer,DeviceMemory}->bind_Buffer_Memory;
+	DeviceMemory->map_Memory->write_Memory;
+	{record_CommandBuffer,Queue,CommandBuffer,bind_Buffer_Memory}->copy;
+	DescriptorSetLayout->PipelineLayout;
+	{DescriptorSetLayout,DescriptorPool}->DescriptorSet;
+	{DescriptorSet,Buffer}->update_DescriptorSet;
+	subgraph cluster_2{
+		Device;
+		Queue;
+		Swapchain;
+		ImageView;
+		ShaderModule;
+		PipelineLayout;
+		RenderPass;
+		subgraph cluster_1{
+			Pipeline;
+			{VertexInputBinding,VertexInputAttribute}->PipelineVertexInputState;
+			{Viewport,Scissor}->PipelineViewportState;
+			PipelineColorBlendAttachmentState->PipelineColorBlendState;
+			{PipelineVertexInputState,PipelineInputAssemblyState,PipelineViewportState,PipelineRasterizationState,PipelineMultisampleState,PipelineColorBlendState}->Pipeline;
+		}
+		Framebuffer;
+		CommandPool;
+		CommandBuffer;
+		Semaphore;
+		Buffer;
+		BufferMemoryRequirements;
+		DeviceMemory;
+		DescriptorSetLayout;
+		DescriptorPool;
+		DescriptorSet;
+
+		Image;
+	}
+	subgraph cluster_0 {
+		map_Memory;
+		write_Memory;
+		copy;
+		draw;
+		update_DescriptorSet;
+		bind_Buffer_Memory;
+		record_CommandBuffer;
+	}
+}
